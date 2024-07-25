@@ -31,4 +31,12 @@ public:
 protected:
 
 	void Move(float DeltaTime);
+
+private:
+
+	FVector GlobalStartLocation;
+	FVector GlobalTargetLocation;
+	FVector GlobalDirection;
+
+	void SwitchTargetLocation();
 };

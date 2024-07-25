@@ -20,6 +20,10 @@ void AMovingPlatform::BeginPlay()
 		SetReplicateMovement(true);
 	}
 
+
+	GlobalStartLocation = GetActorLocation();
+	GlobalTargetLocation = GetActorTransform().TransformPosition(TargetLocation);
+	GlobalDirection = (GlobalTargetLocation - GlobalStartLocation).GetSafeNormal();
 }
 
 void AMovingPlatform::Tick(float DeltaTime)
@@ -35,11 +39,23 @@ void AMovingPlatform::Tick(float DeltaTime)
 
 void AMovingPlatform::Move(float DeltaTime)
 {
-	FVector Location = GetActorLocation();
-	const FVector GlobalTargetLocation = GetActorTransform().TransformPosition(TargetLocation);
-	const FVector Direction = (GlobalTargetLocation - Location).GetSafeNormal();
+	const FVector Location = GetActorLocation() + GlobalDirection * PlatformSpeed * DeltaTime;
 
-	Location += Direction * PlatformSpeed * DeltaTime;
+	const FVector NewDirection = (GlobalTargetLocation - Location).GetSafeNormal();
+	if (!FVector::Coincident(GlobalDirection, NewDirection)) // Current location has passed the target location. (opposite directios)
+	{
+		SwitchTargetLocation();
+	}
+
 	SetActorLocation(Location);
 
+}
+
+void AMovingPlatform::SwitchTargetLocation()
+{
+	const FVector Aux = GlobalStartLocation;
+
+	GlobalStartLocation = GlobalTargetLocation;
+	GlobalTargetLocation = Aux;
+	GlobalDirection = (GlobalTargetLocation - GlobalStartLocation).GetSafeNormal();
 }
