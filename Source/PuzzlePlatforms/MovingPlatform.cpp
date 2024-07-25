@@ -35,6 +35,11 @@ void AMovingPlatform::Tick(float DeltaTime)
 
 void AMovingPlatform::Move(float DeltaTime)
 {
-	SetActorLocation(GetActorLocation() + FVector(PlatformSpeed * DeltaTime, 0, 0));
+	FVector Location = GetActorLocation();
+	const FVector GlobalTargetLocation = GetActorTransform().TransformPosition(TargetLocation);
+	const FVector Direction = (GlobalTargetLocation - Location).GetSafeNormal();
+
+	Location += Direction * PlatformSpeed * DeltaTime;
+	SetActorLocation(Location);
 
 }

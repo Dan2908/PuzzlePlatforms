@@ -25,6 +25,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Platform")
 	float PlatformSpeed = 50.0f;
 
+	UPROPERTY(EditAnywhere, Category = "Platform", Meta = (MakeEditWidget))
+	FVector TargetLocation;
+
 protected:
 
 	void Move(float DeltaTime);
