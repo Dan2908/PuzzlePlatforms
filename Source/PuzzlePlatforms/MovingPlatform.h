@@ -28,9 +28,15 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Platform", Meta = (MakeEditWidget))
 	FVector TargetLocation;
 
+	inline void AddActiveTriggers() { ++ActiveTriggers; }
+	inline void RemoveActiveTriggers() { --ActiveTriggers; }
+
 protected:
 
 	void Move(float DeltaTime);
+
+	UPROPERTY(EditAnywhere)
+	int ActiveTriggers = 1;
 
 private:
 

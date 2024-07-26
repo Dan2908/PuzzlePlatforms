@@ -20,7 +20,6 @@ void AMovingPlatform::BeginPlay()
 		SetReplicateMovement(true);
 	}
 
-
 	GlobalStartLocation = GetActorLocation();
 	GlobalTargetLocation = GetActorTransform().TransformPosition(TargetLocation);
 	GlobalDirection = (GlobalTargetLocation - GlobalStartLocation).GetSafeNormal();
@@ -39,6 +38,11 @@ void AMovingPlatform::Tick(float DeltaTime)
 
 void AMovingPlatform::Move(float DeltaTime)
 {
+	if (ActiveTriggers == 0)
+	{
+		return;
+	}
+
 	const FVector Location = GetActorLocation() + GlobalDirection * PlatformSpeed * DeltaTime;
 
 	const FVector NewDirection = (GlobalTargetLocation - Location).GetSafeNormal();
